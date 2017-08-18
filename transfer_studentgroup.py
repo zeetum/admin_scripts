@@ -7,14 +7,15 @@ import datetime
 
 def get_source(file_location):
     entries = []
-    temp = ""
-    catagory = ""
+
     with open(file_location) as csv_file:
         
         lines = list(csv.reader(csv_file))
         for line in lines[1:]:
+            temp = ""
             catagory = ""
             c = line[16]
+
             if "English" in c or "Literature" in c:
                 catagory = "English"
             if "Math" in c:
@@ -42,7 +43,6 @@ def get_source(file_location):
  
             temp = line[15] + "," + line[16] + "," + line[19] + " " + line[20] + " " + line[21] + "," + catagory + "," + line[17] + "," + line[1] + " " + line[2] + "," + line[0] + "\n"
             entries.append(temp)
-            print(temp)
 
     return entries
 
