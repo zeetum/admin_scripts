@@ -50,7 +50,7 @@ def get_source(file_location):
 # Usage:
 # transfer_studentgroup.py "/Path/to/CSV"
 # this will place a new CSV in the same location as the source file
-def append_csv():
+def translate_csv():
 
     source_location = sys.argv[1]
     target_location = os.path.split(source_location)[0] + "/Bunbury Student Group " + datetime.datetime.now().strftime('%B-%Y') + ".csv"
@@ -63,4 +63,4 @@ def append_csv():
             csv_file.write(student)
 
 
-append_csv()
+translate_csv()
