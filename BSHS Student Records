@@ -9,7 +9,7 @@ def get_source(file_location):
     with open(file_location) as csv_file:
         
         lines = list(csv.reader(csv_file))
-        for line in lines:
+        for line in lines[1:]:
             catagory = ""
             c = line[16]
             if "English" in c or "Literature" in c:
@@ -49,10 +49,11 @@ def append_csv():
     target_location = "/home/localadmin/Documents/Bunbury student group.csv"
     source_location = "/home/localadmin/Documents/PTO Extract.csv"
     
-    append_target = get_source(source_location)
+    rows = get_source(source_location)
 
     with open(target_location, "w") as csv_file:
-        for student in append_target:
+        csv_file.write("Group Name,Group Description,Group Staff,Group Catagory,Class Year,Studnet Name,Student ID\n")
+        for student in rows:
             csv_file.write(student)
 
 
