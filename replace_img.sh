@@ -2,7 +2,7 @@
 if [ $# != 3 ]
 then
     echo "usage: replace_img.sh <directory> <old_image_filename> <new_image_location>\ne.g.
-    ./replace_img.sh ~/www/pictures old_image.png ~/www/new_picture.jpg"
+    ./replace_img.sh /www/pictures old_image.png /www/new_picture.jpg"
 	exit
 fi
 
