@@ -17,8 +17,4 @@ def del_cache_dir(user_dir, cache_dir):
             print("Deleting: " + full_path)
             shutil.rmtree(full_path,ignore_errors=True)
 
-del_cache_dir("/mnt/StudentProfiles", "Application Data/Mozilla")
-del_cache_dir("/mnt/StudentProfiles", "Roaming Profile.V2/AppData/Local/Google")
-del_cache_dir("/mnt/StudentProfiles", "Roaming Profile.V2/AppData/Local/Microsoft/Internet Explorer")
-del_cache_dir("/mnt/StudentProfiles", "Roaming Profile.V2/AppData/Local/Microsoft/Windows/INetCache")
-del_cache_dir("/mnt/StudentProfiles", "Roaming Profile.V2/AppData/Local/Microsoft/Windows/Temporary Internet Files")
+del_cache_dir("/run/user/1000/gvfs/smb-share:server=e5070s01sv001,share=fsschools/Student Folders/E5070S01-Bunbury PS", "Downloads")
