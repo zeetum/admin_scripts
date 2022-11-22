@@ -26,21 +26,23 @@ function Convert-VSSShadows {
 }
 
 # 21/11/2022 3:53:24 PM
-function ConvertTime (timestring) {
+function ConvertTime ($timestring) {
     $datetime_details = $timestring.split(" ")
     
     # Get and convert day time
     $time_details = $datetime_details[1].split(":")
-    if ($datetime_details[2] == "PM") {
-        $time_details[0] += 12
+    if ($datetime_details[2] -eq "PM") {
+        [int]$time_details[0] += 12
     }
     
     $date_details = $datetime_details[0].split("/")
-    
-    return $date_details[2] + "/" + $date_details[1] + "/" + $date_details[0] + "/" + $time_details.join(":")
+    $output_string = $date_details[2] + "/" + $date_details[1] + "/" + $date_details[0] + " " + $($time_details -join ":") 
+
+    return $output_string
 }
 
 
 $shadows = Convert-VSSShadows $(vssadmin list shadows)
-$shadows['Contained 1 shadow copies at creation time'] = ConvertTime($shadows['Contained 1 shadow copies at creation time'])
-Write-Host $shadows
+foreach ($shadow in $shadows) {
+    $shadow.'Contained 1 shadow copies at creation time' = ConvertTime($shadow.'Contained 1 shadow copies at creation time')
+}
