@@ -71,10 +71,10 @@ function PruneShadows ($shadows) {
     foreach ($shadow in $shadows) {
 
         $shadow_date = get-date $shadow.creation_time -Format "yyyy/MM/dd"
-        $shadow_month = get-date $shadow.creation_time -Format "MM"
+        $shadow_month = get-date $shadow.creation_time -Format "yyyy/MM"
         $shadow_week = get-date $shadow.creation_time -UFormat %V
         $shadow_day = $day_of_week.[string](get-date $shadow.creation_time).DayOfWeek
-        if ($shadow_month -eq (get-date -Format "MM")) {
+        if ($shadow_month -eq (get-date -Format "yyyy/MM")) {
             if ($shadow_week -ne (Get-Date -UFormat %V)) {
                 if ($weeks.contains($shadow_week)) {
                     if ((get-date $weeks[$shadow_week]) -lt (get-date $shadow_day)) {
