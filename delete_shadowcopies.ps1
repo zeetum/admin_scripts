@@ -1,4 +1,3 @@
-# https://devblogs.microsoft.com/scripting/create-custom-date-formats-with-powershell/
 function Convert-VSSShadows {
     [CmdletBinding()]
     param(
@@ -48,6 +47,16 @@ function ConvertTime ($timestring) {
 # - Every day of the current week
 # - Every month after that
 function PruneShadows ($shadows) {
+    $day_of_week = @{
+        "Sunday" = 0
+        "Monday" = 1;
+        "Tuesday" = 2;
+        "Wednesday" = 3;
+        "Thursday" = 4;
+        "Friday" = 5;
+        "Saturday" = 6
+    }
+
     $current_date =  Get-Date -Format "yyyy/MM/dd"
  
     # Prune all but last shadowcopy of every other day
@@ -77,10 +86,10 @@ function PruneShadows ($shadows) {
     foreach ($shadow in $shadows) {
         $shadow_date = $shadow.creation_time.split(" ")[0]
         $shadow_month = $shadow_date.split("/")[1]
-        $shadow_week = ([Datetime]$shadow_date) -UFormat %V
-        $shadow_day = [datetime]$shadow_date.DayOfWeek
+        $shadow_week = Get-Date $shadow_date -UFormat %V
+        $shadow_day = $day_of_week.[string]([datetime]$shadow_date).DayOfWeek
         if ($shadow_month -eq $current_date.split("/")[1]) {
-            if ($shadow_week -ne $current_date -UFormat %V) {
+            if ($shadow_week -ne $(Get-Date $current_date -UFormat %V)) {
                 if ($weeks.contains($shadow_week))
                     if ($weeks[$shadow_week] -lt $shadow_day) {
                         $(vssadmin delete shadows /shadow $shadows[$shadow_date])
@@ -100,16 +109,16 @@ function PruneShadows ($shadows) {
     foreach ($shadow in $shadows) {
         $shadow_date = $shadow.creation_time.split(" ")[0]
         $shadow_month = $shadow_date.split("/")[1]
-        $shadow_day = $shadow_date[2]
+        $shadow_week = Get-Date $shadow_date -UFormat %V
         if ($shadow_month -ne $current_date.split("/")[1]) {
             if ($months.contains($shadow_week)) {
-                if ($months[$shadow_month] -lt $shadow_day) {
+                if ($months[$shadow_month] -lt $shadow_week) {
                     $(vssadmin delete shadows /shadow $shadows[$shadow_date])
-                    $months[$shadow_date] = $shadow_day
+                    $months[$shadow_date] = $shadow_week
                     $shadows[$shadow_date] = $shadow.shadow_id
                 }
             } else {
-                $months[$shadow_date] = $shadow_day
+                $months[$shadow_date] = $shadow_week
                 $shadows[$shadow_date] = $shadow.shadow_id
             }
             
@@ -121,4 +130,4 @@ $shadows = Convert-VSSShadows $(vssadmin list shadows)
 foreach ($shadow in $shadows) {
     $shadow.'creation_time' = ConvertTime($shadow.'creation_time')
 }
-PruneShadows($shadows)
+PruneShadows $shadows
