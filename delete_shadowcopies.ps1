@@ -66,7 +66,7 @@ function PruneShadows ($shadows) {
         $shadow_date = (get-date $shadow.creation_time -Format "yyyy/MM/dd")
         $shadow_time = (get-date $shadow.creation_time -UFormat %R)
 
-        if ((get-date $shadow_date) -ne (Get-Date -Format "yyyy/MM/dd")) {
+        if ($shadow_date -ne (Get-Date -Format "yyyy/MM/dd")) {
             if ($days.contains($shadow_date)) {
                 if ((get-date $days[$shadow_date]) -lt (get-date $shadow_time)) {
                     #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
@@ -86,11 +86,10 @@ function PruneShadows ($shadows) {
     $weeks = @{}
     $shadow_stack = @{}
     foreach ($shadow in $shadows) {
-        $shadow_date = get-date $shadow.creation_time -Format "yyyy/mm/dd"
+        $shadow_date = get-date $shadow.creation_time -Format "yyyy/MM/dd"
         $shadow_month = get-date $shadow.creation_time -Format "MM"
         $shadow_week = get-date $shadow.creation_time -UFormat %V
         $shadow_day = $day_of_week.[string](get-date $shadow.creation_time).DayOfWeek
-
 
         if ($shadow_month -eq (get-date -Format "MM")) {
             if ($shadow_week -ne (Get-Date -UFormat %V)) {
@@ -112,20 +111,22 @@ function PruneShadows ($shadows) {
     # Prune all but last day of every other month
     $months = @{}
     $shadow_stack = @{}
-    $shadow_date = get-date $shadow.creation_time -Format "yyyy/mm/dd"
-    $shadow_month = get-date $shadow.creation_time -Format "MM"
-    $shadow_week = Get-Date $shadow_date -UFormat %V
-    if ($shadow_month -ne (get-date -Format "MM")) {
-        if ($months.contains($shadow_week)) {
-            if ((get-date $months[$shadow_month]) -lt (get-date $shadow_week)) {
-                # $(vssadmin delete shadows /shadow $shadows[$shadow_date])
-                Write-Host "Pruning month: "$shadow_stack[$shadow_date]
+    foreach ($shadow in $shadows) {
+        $shadow_date = get-date $shadow.creation_time -Format "yyyy/MM/dd"
+        $shadow_month = get-date $shadow.creation_time -Format "MM"
+        $shadow_week = Get-Date $shadow_date -UFormat %V
+        if ($shadow_month -ne (get-date -Format "mm")) {
+            if ($months.contains($shadow_week)) {
+                if ((get-date $months[$shadow_month]) -lt (get-date $shadow_week)) {
+                    # $(vssadmin delete shadows /shadow $shadows[$shadow_date])
+                    Write-Host "Pruning month: "$shadow_stack[$shadow_date]
+                    $months[$shadow_date] = $shadow_week
+                    $shadow_stack[$shadow_date] = $shadow.shadow_id
+                }
+            } else {
                 $months[$shadow_date] = $shadow_week
                 $shadow_stack[$shadow_date] = $shadow.shadow_id
             }
-        } else {
-            $months[$shadow_date] = $shadow_week
-            $shadow_stack[$shadow_date] = $shadow.shadow_id
         }
     }
 }
