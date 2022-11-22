@@ -91,7 +91,7 @@ function PruneShadows ($shadows) {
         $shadow_week = get-date $shadow.creation_time -UFormat %V
         $shadow_day = $day_of_week.[string](get-date $shadow.creation_time).DayOfWeek
 
-        if ((get-date $shadow_month) -eq (get-date -Format "MM) {
+        if ((get-date $shadow_month) -eq (get-date -Format "MM")) {
 
             if ((get-date $shadow_week) -ne (Get-Date $current_date -UFormat %V)) {
                 if ($weeks.contains($shadow_week)) {
