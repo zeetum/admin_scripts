@@ -26,23 +26,6 @@ function Convert-VSSShadows {
     }
 }
 
-# Converts to the format:
-# 2022/11/21 3:53:24 PM
-function ConvertTime ($timestring) {
-    $datetime_details = $timestring.split(" ")
-    
-    # Get and convert day time
-    $time_details = $datetime_details[1].split(":")
-    if ($datetime_details[2] -eq "PM") {
-        [int]$time_details[0] += 12
-    }
-    
-    $date_details = $datetime_details[0].split("/")
-    $output_string = $date_details[2] + "/" + $date_details[1] + "/" + $date_details[0] + " " + $($time_details -join ":") 
-
-    return $output_string
-}
-
 # Prune's shadow copies to have the following backups:
 # - Every hour of the current day
 # - Every day of the current week
@@ -132,7 +115,4 @@ function PruneShadows ($shadows) {
 }
 
 $shadows = Convert-VSSShadows $(vssadmin list shadows)
-#foreach ($shadow in $shadows) {
-#    $shadow.'creation_time' = ConvertTime($shadow.'creation_time')
-#}
 PruneShadows $shadows
