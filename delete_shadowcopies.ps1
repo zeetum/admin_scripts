@@ -29,6 +29,7 @@ function Convert-VSSShadows {
 # Prune's shadow copies to have the following backups:
 # - Every hour of the current day
 # - Every day of the current week
+# - Every week of the current month
 # - Every month after that
 function PruneShadows ($shadows) {
     $day_of_week = @{
