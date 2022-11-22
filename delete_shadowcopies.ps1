@@ -27,7 +27,7 @@ function Convert-VSSShadows {
 
 # 21/11/2022 3:53:24 PM
 function ConvertTime (timestring) {
-    $datetime_details = $time.split(" ")
+    $datetime_details = $timestring.split(" ")
     
     # Get and convert day time
     $time_details = $datetime_details[1].split(":")
@@ -37,7 +37,7 @@ function ConvertTime (timestring) {
     
     $date_details = $datetime_details[0].split("/")
     
-    return $date_details[2] + "/" + $date_details[1] + "/" + $date_details[0] + "/" + time_details.join(":")
+    return $date_details[2] + "/" + $date_details[1] + "/" + $date_details[0] + "/" + $time_details.join(":")
 }
 
 
