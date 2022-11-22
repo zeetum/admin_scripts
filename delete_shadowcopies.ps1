@@ -61,20 +61,21 @@ function PruneShadows ($shadows) {
  
     # Prune all but last shadowcopy of every other day
     $days = @{}
-    $shadows = @{}
+    $shadow_stack = @{}
     foreach ($shadow in $shadows) {
         $shadow_date = $shadow.creation_time.split(" ")[0]
         $shadow_time = $shadow.creation_time.split(" ")[1]
         if ($shadow_date -ne $current_date) {
             if ($days.contains($shadow_date)) {
-                if ($days[$shadow_date] < $shadow_time) {
-                    $(vssadmin delete shadows /shadow $shadows[$shadow_date])
+                if ($days[$shadow_date] -lt $shadow_time) {
+                    #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
+                    Write-Host "Deleting: "$shadow_stack[$shadow_date]
                     $days[$shadow_date] = $shadow_time
-                    $shadows[$shadow_date] = $shadow.shadow_id
+                    $shadow_stack[$shadow_date] = $shadow.shadow_id
                 }
             } else {
                 $days[$shadow_date] = $shadow_time
-                $shadows[$shadow_date] = $shadow.shadow_id
+                $shadow_stack[$shadow_date] = $shadow.shadow_id
             }
             
         }
@@ -82,7 +83,7 @@ function PruneShadows ($shadows) {
     
     # Prune all but last shadowcopy of other every week
     $weeks = @{}
-    $shadows = @{}
+    $shadow_stack = @{}
     foreach ($shadow in $shadows) {
         $shadow_date = $shadow.creation_time.split(" ")[0]
         $shadow_month = $shadow_date.split("/")[1]
@@ -90,14 +91,16 @@ function PruneShadows ($shadows) {
         $shadow_day = $day_of_week.[string]([datetime]$shadow_date).DayOfWeek
         if ($shadow_month -eq $current_date.split("/")[1]) {
             if ($shadow_week -ne $(Get-Date $current_date -UFormat %V)) {
-                if ($weeks.contains($shadow_week))
+                if ($weeks.contains($shadow_week)) {
                     if ($weeks[$shadow_week] -lt $shadow_day) {
-                        $(vssadmin delete shadows /shadow $shadows[$shadow_date])
+                        #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
+                        Write-Host "Deleting: "$shadow_stack[$shadow_date]
                         $weeks[$shadow_date] = $shadow_time
-                        $shadows[$shadow_date] = $shadow.shadow_id
+                        $shadow_stack[$shadow_date] = $shadow.shadow_id
+                    }
                 } else {
                     $weeks[$shadow_date] = $shadow_day
-                    $shadows[$shadow_date] = $shadow.shadow_id
+                    $shadow_stack[$shadow_date] = $shadow.shadow_id
                 }
             }
         }
@@ -105,7 +108,7 @@ function PruneShadows ($shadows) {
     
     # Prune all but last day of every other month
     $months = @{}
-    $shadows = @{}
+    $shadow_stack = @{}
     foreach ($shadow in $shadows) {
         $shadow_date = $shadow.creation_time.split(" ")[0]
         $shadow_month = $shadow_date.split("/")[1]
@@ -113,13 +116,14 @@ function PruneShadows ($shadows) {
         if ($shadow_month -ne $current_date.split("/")[1]) {
             if ($months.contains($shadow_week)) {
                 if ($months[$shadow_month] -lt $shadow_week) {
-                    $(vssadmin delete shadows /shadow $shadows[$shadow_date])
+                    #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
+                    Write-Host "Deleting: "$shadow_stack[$shadow_date]
                     $months[$shadow_date] = $shadow_week
-                    $shadows[$shadow_date] = $shadow.shadow_id
+                    $shadow_stack[$shadow_date] = $shadow.shadow_id
                 }
             } else {
                 $months[$shadow_date] = $shadow_week
-                $shadows[$shadow_date] = $shadow.shadow_id
+                $shadow_stack[$shadow_date] = $shadow.shadow_id
             }
             
         }
