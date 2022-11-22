@@ -63,11 +63,12 @@ function PruneShadows ($shadows) {
     $days = @{}
     $shadow_stack = @{}
     foreach ($shadow in $shadows) {
+        Write-Host $shadow.creation_time
         $shadow_date = $shadow.creation_time.split(" ")[0]
         $shadow_time = $shadow.creation_time.split(" ")[1]
         if ($shadow_date -ne $current_date) {
             if ($days.contains($shadow_date)) {
-                if ($days[$shadow_date] -lt $shadow_time) {
+                if ((get-date $days[$shadow_date]) -lt (get-date $shadow_time)) {
                     #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
                     Write-Host "Pruning Day: "$shadow_stack[$shadow_date]
                     $days[$shadow_date] = $shadow_time
@@ -90,9 +91,11 @@ function PruneShadows ($shadows) {
         $shadow_week = Get-Date $shadow_date -UFormat %V
         $shadow_day = $day_of_week.[string]([datetime]$shadow_date).DayOfWeek
         if ($shadow_month -eq $current_date.split("/")[1]) {
+            #Write-Host "shadow_week: "$shadow_week
+            #Write-Host "current_week: "$(Get-Date $current_date -UFormat %V)
             if ($shadow_week -ne $(Get-Date $current_date -UFormat %V)) {
                 if ($weeks.contains($shadow_week)) {
-                    if ($weeks[$shadow_week] -lt $shadow_day) {
+                    if ((get-date $weeks[$shadow_week]) -lt (get-date $shadow_day)) {
                         #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
                         Write-Host "Pruning week: "$shadow_stack[$shadow_date]
                         $weeks[$shadow_date] = $shadow_time
@@ -115,7 +118,7 @@ function PruneShadows ($shadows) {
         $shadow_week = Get-Date $shadow_date -UFormat %V
         if ($shadow_month -ne $current_date.split("/")[1]) {
             if ($months.contains($shadow_week)) {
-                if ($months[$shadow_month] -lt $shadow_week) {
+                if ((get-date $months[$shadow_month]) -lt (get-date $shadow_week)) {
                     #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
                     Write-Host "Pruning month: "$shadow_stack[$shadow_date]
                     $months[$shadow_date] = $shadow_week
@@ -131,7 +134,7 @@ function PruneShadows ($shadows) {
 }
 
 $shadows = Convert-VSSShadows $(vssadmin list shadows)
-foreach ($shadow in $shadows) {
-    $shadow.'creation_time' = ConvertTime($shadow.'creation_time')
-}
+#foreach ($shadow in $shadows) {
+#    $shadow.'creation_time' = ConvertTime($shadow.'creation_time')
+#}
 PruneShadows $shadows
