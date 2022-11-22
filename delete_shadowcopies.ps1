@@ -69,7 +69,7 @@ function PruneShadows ($shadows) {
             if ($days.contains($shadow_date)) {
                 if ($days[$shadow_date] -lt $shadow_time) {
                     #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
-                    Write-Host "Deleting: "$shadow_stack[$shadow_date]
+                    Write-Host "Pruning Day: "$shadow_stack[$shadow_date]
                     $days[$shadow_date] = $shadow_time
                     $shadow_stack[$shadow_date] = $shadow.shadow_id
                 }
@@ -94,7 +94,7 @@ function PruneShadows ($shadows) {
                 if ($weeks.contains($shadow_week)) {
                     if ($weeks[$shadow_week] -lt $shadow_day) {
                         #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
-                        Write-Host "Deleting: "$shadow_stack[$shadow_date]
+                        Write-Host "Pruning week: "$shadow_stack[$shadow_date]
                         $weeks[$shadow_date] = $shadow_time
                         $shadow_stack[$shadow_date] = $shadow.shadow_id
                     }
@@ -117,7 +117,7 @@ function PruneShadows ($shadows) {
             if ($months.contains($shadow_week)) {
                 if ($months[$shadow_month] -lt $shadow_week) {
                     #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
-                    Write-Host "Deleting: "$shadow_stack[$shadow_date]
+                    Write-Host "Pruning month: "$shadow_stack[$shadow_date]
                     $months[$shadow_date] = $shadow_week
                     $shadow_stack[$shadow_date] = $shadow.shadow_id
                 }
