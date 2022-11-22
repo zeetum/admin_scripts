@@ -80,12 +80,12 @@ function PruneShadows ($shadows) {
                     if ((get-date $weeks[$shadow_week]) -lt (get-date $shadow_day)) {
                         #$(vssadmin delete shadows /shadow $shadows[$shadow_date])
                         Write-Host "Pruning week: "$shadow_stack[$shadow_date]
-                        $weeks[$shadow_date] = $shadow_time
-                        $shadow_stack[$shadow_date] = $shadow.shadow_id
+                        $weeks[$shadow_week] = $shadow_time
+                        $shadow_stack[$shadow_week] = $shadow.shadow_id
                     }
                 } else {
-                    $weeks[$shadow_date] = $shadow_day
-                    $shadow_stack[$shadow_date] = $shadow.shadow_id
+                    $weeks[$shadow_week] = $shadow_day
+                    $shadow_stack[$shadow_week] = $shadow.shadow_id
                 }
             }
         }
@@ -97,19 +97,19 @@ function PruneShadows ($shadows) {
     foreach ($shadow in $shadows) {
 
         $shadow_date = get-date $shadow.creation_time -Format "yyyy/MM/dd"
-        $shadow_month = get-date $shadow.creation_time -Format "MM"
+        $shadow_month = get-date $shadow.creation_time -Format "yyyy/MM"
         $shadow_week = Get-Date $shadow_date -UFormat %V
-        if ($shadow_month -ne (get-date -Format "MM")) {
-            if ($months.contains($shadow_week)) {
+        if ($shadow_month -ne (get-date -Format "yyyy/MM")) {
+            if ($months.contains($shadow_month)) {
                 if ((get-date $months[$shadow_month]) -lt (get-date $shadow_week)) {
                     # $(vssadmin delete shadows /shadow $shadows[$shadow_date])
                     Write-Host "Pruning month: "$shadow_stack[$shadow_date]
-                    $months[$shadow_date] = $shadow_week
-                    $shadow_stack[$shadow_date] = $shadow.shadow_id
+                    $months[$shadow_month] = $shadow_week
+                    $shadow_stack[$shadow_month] = $shadow.shadow_id
                 }
             } else {
-                $months[$shadow_date] = $shadow_week
-                $shadow_stack[$shadow_date] = $shadow.shadow_id
+                $months[$shadow_month] = $shadow_week
+                $shadow_stack[$shadow_month] = $shadow.shadow_id
             }
         }
     }
