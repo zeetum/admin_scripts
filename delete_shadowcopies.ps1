@@ -120,3 +120,4 @@ $shadows = Convert-VSSShadows $(vssadmin list shadows)
 foreach ($shadow in $shadows) {
     $shadow.'creation_time' = ConvertTime($shadow.'creation_time')
 }
+PruneShadows($shadows)
