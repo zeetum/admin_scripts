@@ -91,8 +91,7 @@ function PruneShadows ($shadows) {
         }
     }
     
-    # Prune all but last day of every other month
-    # TODO: Change this to a rolling 2 weeks in the past
+    # Prune all but last day of every other month older than 2 weeks
     $months = @{}
     $shadow_stack = @{}
     foreach ($shadow in $shadows) {
