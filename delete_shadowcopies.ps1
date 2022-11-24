@@ -100,7 +100,7 @@ function PruneShadows ($shadows) {
         $shadow_date = get-date $shadow.creation_time -Format "yyyy/MM/dd"
         $shadow_month = get-date $shadow.creation_time -Format "yyyy/MM"
         $shadow_week = Get-Date $shadow_date -UFormat %V
-        if ($shadow_month -ne (get-date -Format "yyyy/MM")) {
+        if (($shadow_month -ne (get-date -Format "yyyy/MM")) -and ($shadow_month -lt  ((Get-Date).adddays(-14)))) {
             if ($months.contains($shadow_month)) {
                 if ((get-date $months[$shadow_month]) -lt (get-date $shadow_week)) {
                     # $(vssadmin delete shadows /shadow $shadows[$shadow_date])
