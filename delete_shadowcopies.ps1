@@ -47,8 +47,8 @@ function PruneShadows ($shadows) {
     $shadow_stack = @{}
     foreach ($shadow in $shadows) {
 
-        $shadow_date = (get-date $shadow.creation_time -Format "yyyy/MM/dd")
-        $shadow_time = (get-date $shadow.creation_time -UFormat %R)
+        $shadow_date = get-date $shadow.creation_time -Format "yyyy/MM/dd"
+        $shadow_time = get-date $shadow.creation_time -UFormat %R
         if ($shadow_date -ne (Get-Date -Format "yyyy/MM/dd")) {
             if ($days.contains($shadow_date)) {
                 if ((get-date $days[$shadow_date]) -lt (get-date $shadow_time)) {
