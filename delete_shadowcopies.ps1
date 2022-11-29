@@ -52,7 +52,8 @@ function PruneShadows ($shadows) {
         if ($shadow_date -ne (Get-Date -Format "yyyy/MM/dd")) {
             if ($days.contains($shadow_date)) {
                 if ((get-date $days[$shadow_date]) -lt (get-date $shadow_time)) {
-                    $(vssadmin delete shadows /shadow=$shadows[$shadow_date])
+                    $command = 'vssadmin delete shadows /shadow="{' + $shadow_stack[$shadow_date] + '}" /quiet'
+                    Invoke-Expression -Command $command
                     Write-Host "Pruning Day: "$shadow_stack[$shadow_date]
                     $days[$shadow_date] = $shadow_time
                     $shadow_stack[$shadow_date] = $shadow.shadow_id
@@ -78,7 +79,8 @@ function PruneShadows ($shadows) {
             if ($shadow_week -ne (Get-Date -UFormat %V)) {
                 if ($weeks.contains($shadow_week)) {
                     if ((get-date $weeks[$shadow_week]) -lt (get-date $shadow_day)) {
-                        $(vssadmin delete shadows /shadow=$shadows[$shadow_date])
+                        $command = 'vssadmin delete shadows /shadow="{' + $shadow_stack[$shadow_date] + '}" /quiet'
+                        Invoke-Expression -Command $command
                         Write-Host "Pruning week: "$shadow_stack[$shadow_date]
                         $weeks[$shadow_week] = $shadow_time
                         $shadow_stack[$shadow_week] = $shadow.shadow_id
@@ -102,7 +104,8 @@ function PruneShadows ($shadows) {
         if (($shadow_month -ne (get-date -Format "yyyy/MM")) -and ($shadow_month -lt  ((Get-Date).adddays(-14)))) {
             if ($months.contains($shadow_month)) {
                 if ((get-date $months[$shadow_month]) -lt (get-date $shadow_week)) {
-                    $(vssadmin delete shadows /shadow=$shadows[$shadow_date])
+                    $command = 'vssadmin delete shadows /shadow="{' + $shadow_stack[$shadow_date] + '}" /quiet'
+                    Invoke-Expression -Command $command
                     Write-Host "Pruning month: "$shadow_stack[$shadow_date]
                     $months[$shadow_month] = $shadow_week
                     $shadow_stack[$shadow_month] = $shadow.shadow_id
