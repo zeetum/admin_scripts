@@ -1,4 +1,9 @@
 # https://devblogs.microsoft.com/scripting/create-custom-date-formats-with-powershell/
+
+# Every Hour:
+#     wmic shadowcopy call create Volume=C:\
+# Every Day:
+#     powershell -executionpolicy bypass -file C:\tier3_share\prune_shadowcopies.ps1
 function Convert-VSSShadows {
     [CmdletBinding()]
     param(
