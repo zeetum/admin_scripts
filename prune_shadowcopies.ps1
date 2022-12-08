@@ -1,4 +1,5 @@
 # https://devblogs.microsoft.com/scripting/create-custom-date-formats-with-powershell/
+# https://www.veritas.com/support/en_US/article.100005226
 
 # Every Hour:
 #     wmic shadowcopy call create Volume=C:\
