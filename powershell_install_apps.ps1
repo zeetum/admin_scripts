@@ -12,4 +12,4 @@ $allApps | Format-Table -AutoSize
 $NAPBrowser = $allApps | Where-Object -Property Name -Like "*NAPLAN Locked Down Browser*"
 
 # Install the app
-Run-Install -OUPath $OUPath -apps $(NAPBrowser.Id) -Creds = $credentials
+([wmiclass]'ROOT\ccm\ClientSdk:CCM_Application').Install($($NAPBrowser.Id), $($NAPBrowser.Revision), 1, 0, 'Normal', $False)
