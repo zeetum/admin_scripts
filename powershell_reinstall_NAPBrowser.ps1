@@ -2,6 +2,7 @@
 $computer = $env:computername
 $UninstallRegKey="SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"
 
+# Search the currently installed apps and remove the NAP Locked down browser
 foreach ($regArch in @('Registry32', 'Registry64')) {
     $HKLM = [microsoft.win32.registrykey]::OpenRemoteBaseKey('LocalMachine',$computer,$regArch)
     $UninstallRef = $HKLM.OpenSubKey($UninstallRegKey)
@@ -13,6 +14,7 @@ foreach ($regArch in @('Registry32', 'Registry64')) {
         $AppDisplayName = $($AppDetails.GetValue("DisplayName"))
         $AppUninstall = $($AppDetails.GetValue("UninstallString"))
         
+        # Find the NAP Browser to uninstall
         if($AppDisplayName -like "NAP Locked down browser") { 
             $start = $AppUninstall.IndexOf("{")
             $stop = $AppUninstall.IndexOf("}")
