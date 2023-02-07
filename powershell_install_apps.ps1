@@ -3,7 +3,7 @@ $OUPath = "OU=School Managed,OU=Computers,OU=E5070S01,OU=Schools,DC=indigo,DC=sc
 $credentials = Get-Credential
 
 # Get all available software
-$allApps = Get-WmiObject -query "select * from CCM_Application" -namespace "root\ccm\clientsdk"| Select Name, Id
+$allApps = Get-WmiObject -query "select * from CCM_Application" -namespace "root\ccm\clientsdk"| Select Name, Id, Revision
 
 # Find the app you want
 $allApps | Format-Table -AutoSize
