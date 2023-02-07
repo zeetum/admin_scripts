@@ -22,6 +22,8 @@ foreach ($regArch in @('Registry32', 'Registry64')) {
             $arguments = " /qn /x " + "'" + $UninstallString + "'"
             $command = "msiexec" + $arguments
             Invoke-Expression $command
+            
+            Write-Host "Removed NAP Browser"
         }
     }
 }
@@ -34,4 +36,5 @@ $allApps = Get-WmiObject -query "select * from CCM_Application" -namespace "root
 $NAPBrowser = $allApps | Where-Object -Property Name -Like "*NAPLAN Locked Down Browser*"
 
 # Install the app
-([wmiclass]'ROOT\ccm\ClientSdk:CCM_Application').Install($($NAPBrowser.Id), $($NAPBrowser.Revision), 1, 0, 'Normal', $False)
+$result = ([wmiclass]'ROOT\ccm\ClientSdk:CCM_Application').Install($($NAPBrowser.Id), $($NAPBrowser.Revision), 1, 0, 'Normal', $False)
+Write-Host $result
