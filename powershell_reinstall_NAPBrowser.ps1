@@ -11,6 +11,7 @@ foreach ($regArch in @('Registry32', 'Registry64')) {
     foreach ($App in $Applications) {
         $AppRegistryKey = $UninstallRegKey + "\\" + $App
         $AppDetails = $HKLM.OpenSubKey($AppRegistryKey)
+        Write-Host $AppDetails
         $AppDisplayName = $($AppDetails.GetValue("DisplayName"))
         $AppUninstall = $($AppDetails.GetValue("UninstallString"))
         
@@ -21,9 +22,9 @@ foreach ($regArch in @('Registry32', 'Registry64')) {
             $UninstallString = $AppUninstall.substring($start, $stop - $start + 1)
             $arguments = " /qn /x " + "'" + $UninstallString + "'"
             $command = "msiexec" + $arguments
-            Invoke-Expression $command
-            
-            Write-Host "Removed NAP Browser"
+            Invoke-Expression "$($command) | Out-Null"
+
+            Write-Host "Removed: "$AppDisplayName
         }
     }
 }
@@ -39,5 +40,5 @@ $NAPBrowser = $allApps | Where-Object -Property Name -Like "*NAPLAN Locked Down 
 ([wmiclass]'ROOT\ccm\ClientSdk:CCM_Application').Install($($NAPBrowser.Id), $($NAPBrowser.Revision), 1, 0, 'Normal', $False)
 
 if ($NAPBrowser) {
-    Write-Host "Installed NAP Browser"
+    Write-Host "Installed: " $NAPBrowser.Name
 }
