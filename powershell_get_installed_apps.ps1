@@ -16,7 +16,7 @@ foreach ($regArch in @('Registry32', 'Registry64')) {
         $AppPublisher = $($AppDetails.GetValue("Publisher"))
         $AppInstalledDate = $($AppDetails.GetValue("InstallDate"))
         $AppUninstall = $($AppDetails.GetValue("UninstallString"))
-        if(!$AppDisplayName) { continue }
+        if(!$AppDisplayName) { continue } else { Write-Host $AppDisplayName }
         $OutputObj = New-Object -TypeName PSobject
         $OutputObj | Add-Member -MemberType NoteProperty -Name ComputerName -Value $Computer.ToUpper()
         $OutputObj | Add-Member -MemberType NoteProperty -Name AppName -Value $AppDisplayName
@@ -30,7 +30,6 @@ foreach ($regArch in @('Registry32', 'Registry64')) {
         } else {
             $OutputObj | Add-Member -MemberType NoteProperty -Name Arch -Value '64'
         }
-        $OutputObj | Format-Table -AutoSize
     }
 }
 
