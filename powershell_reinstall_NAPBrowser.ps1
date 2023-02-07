@@ -19,7 +19,7 @@ foreach ($regArch in @('Registry32', 'Registry64')) {
             $start = $AppUninstall.IndexOf("{")
             $stop = $AppUninstall.IndexOf("}")
             $UninstallString = $AppUninstall.substring($start, $stop - $start + 1)
-            $arguments = " /x " + "'" + $UninstallString + "'"
+            $arguments = " /qn /x " + "'" + $UninstallString + "'"
             $command = "msiexec" + $arguments
             Invoke-Expression $command
         }
