@@ -11,7 +11,6 @@ foreach ($regArch in @('Registry32', 'Registry64')) {
     foreach ($App in $Applications) {
         $AppRegistryKey = $UninstallRegKey + "\\" + $App
         $AppDetails = $HKLM.OpenSubKey($AppRegistryKey)
-        Write-Host $AppDetails
         $AppDisplayName = $($AppDetails.GetValue("DisplayName"))
         $AppUninstall = $($AppDetails.GetValue("UninstallString"))
         
