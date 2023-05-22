@@ -1,7 +1,7 @@
-$serial = $(Get-WmiObject win32_bios | select -ExpandProperty Serialnumber)
-$Model = (Get-WmiObject -Class win32_computersystem).Model
+$serial = (Get-WmiObject win32_bios).Serialnumber
+$model = (Get-WmiObject -Class win32_computersystem).Model
 
-switch ($Model) {
+switch ($model) {
     "Something" {
         Write-Host "Lease 15/16"
     }
