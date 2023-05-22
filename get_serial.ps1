@@ -9,7 +9,7 @@ switch ($model) {
         Write-Host "Model: 2022 School Owned"
     }
     default {
-        Write-Host "Model: No Match"
+        Write-Host "Model: "$model
     }
 }
 
