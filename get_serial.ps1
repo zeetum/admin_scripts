@@ -1,5 +1,5 @@
 $serial = (Get-WmiObject win32_bios).Serialnumber
-$model = (Get-WmiObject -Class win32_computersystem).Model
+$model = (Get-WmiObject win32_computersystem).Model
 
 switch ($model) {
     "Something" {
