@@ -37,5 +37,4 @@ foreach ($result in $results) {
     Write-Host "Serial: "$serial
 
     Add-Content $FileName $computerName","$model","$serial
-
 }
