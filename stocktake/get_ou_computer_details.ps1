@@ -25,7 +25,7 @@ $searcher.Filter = "(objectClass=computer)"
 $results = $searcher.FindAll()
 Write-Host "Number of Computers: "$results.Count`n
 
-# Write computer details to console
+# Write computer details to a CSV with the name the selected OU
 Set-Content $FileName "Hostname, Model, Serial"
 foreach ($result in $results) {
     $computerName = $result.Properties["name"][0]
