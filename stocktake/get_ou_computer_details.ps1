@@ -13,8 +13,10 @@ $creds = new-object -typename System.Management.Automation.PSCredential -argumen
 
 # Choose OU
 $LocalOU = "OU=School Managed,OU=Computers,OU=E"+$SiteCode+"S01,OU=Schools,DC="+$Dom+",DC=schools,DC=internal"
-$OU = $(Choose-ADOrganizationalUnit -HideNewOUFeature -Domain $FullDomNme -Credential $creds -RootOU $LocalOU).DistinguishedName
-Write-Host "OU: "$OU
+$OUDetails = $(Choose-ADOrganizationalUnit -HideNewOUFeature -Domain $FullDomNme -Credential $creds -RootOU $LocalOU)
+$OU = $OUDetails.DistinguishedName
+$FileName = $OUDetails.Name + ".csv"
+Write-Host `n"OU: "$OU
 
 # Find all computers in the OU
 $ouEntry = New-Object System.DirectoryServices.DirectoryEntry("LDAP://$OU", $username, $password)
@@ -24,25 +26,16 @@ $results = $searcher.FindAll()
 
 # Write computer details to console
 Write-Host "Number of Computers: "$results.Count`n
+Set-Content $FileName "Hostname, Model, Serial"
 foreach ($result in $results) {
     $computerName = $result.Properties["name"][0]
-    Write-Host "Computer Name: $computerName"
-
     $serial = (Get-WmiObject -ComputerName $computerName win32_bios).Serialnumber
     $model = (Get-WmiObject -ComputerName $computerName win32_computersystem).Model
 
-    # A switch to map computer model's to leases/owned etc
-    switch ($model) {
-        "20Q6S3N800" {
-            Write-Host "Model: Lenovo Lease 15/16"
-        }
-        "20X2S3T200" {
-            Write-Host "Model: Lenovo 2022 School Owned"
-        }
-        default {
-            Write-Host "Model: "$model
-        }
-    }
-    
-    Write-Host "Serial: "$serial`n
+    Write-Host `n"Computer Name: $computerName"
+    Write-Host "Model: "$model
+    Write-Host "Serial: "$serial
+
+    Add-Content $FileName $computerName","$model","$serial
+
 }
