@@ -1,19 +1,9 @@
 Import-Module ActiveDirectory
-Import-Module .\GetLoginCredentials.psm1
 Import-Module .\Choose-ADOrganizationalUnit.psm1
 
-# Get Credentials
-$LoginCredentials = GetCredentials
-$DCAddress = $LoginCredentials['DCAddress'].split(".")
-$SiteCode = $DCAddress[0].substring(1, 4)
-$Dom = $DCAddress[1]
-$FullDomNme = $DCAddress[1..3] -join "."
-$username = $LoginCredentials['username']
-$password = $LoginCredentials['password']
-$creds = new-object -typename System.Management.Automation.PSCredential -argumentlist $Dom\$username, (ConvertTo-SecureString $password -AsPlainText -Force)
-Write-Host "Got credentials, trying to join domain"
-
 # Choose OU
+$SiteCode = "5070"
+$Dom = "indigo"
 $LocalOU = "OU=School Managed,OU=Computers,OU=E"+$SiteCode+"S01,OU=Schools,DC="+$Dom+",DC=schools,DC=internal"
 $OU = Choose-ADOrganizationalUnit -HideNewOUFeature -Domain $FullDomNme -Credential $creds -RootOU $LocalOU
 
