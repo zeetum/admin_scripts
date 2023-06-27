@@ -3,7 +3,7 @@ Import-Module .\Choose-ADOrganizationalUnit.psm1
 # Site Details
 $SiteCode = "5070"
 $Colour = "indigo"
-$FullDomainName = $Colour".schools.internal"
+$FullDomainName = $Colour + ".schools.internal"
 
 # Choose OU
 $LocalOU = "OU=School Managed,OU=Computers,OU=E"+$SiteCode+"S01,OU=Schools,DC="+$Colour+",DC=schools,DC=internal"
