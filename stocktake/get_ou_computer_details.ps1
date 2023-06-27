@@ -13,7 +13,7 @@ $creds = new-object -typename System.Management.Automation.PSCredential -argumen
 
 # Choose OU
 $LocalOU = "OU=School Managed,OU=Computers,OU=E"+$SiteCode+"S01,OU=Schools,DC="+$Dom+",DC=schools,DC=internal"
-$OUDetails = $(Choose-ADOrganizationalUnit -HideNewOUFeature -Domain $FullDomNme -Credential $creds -RootOU $LocalOU)
+$OUDetails = Choose-ADOrganizationalUnit -HideNewOUFeature -Domain $FullDomNme -Credential $creds -RootOU $LocalOU
 $OU = $OUDetails.DistinguishedName
 $FileName = $OUDetails.Name + ".csv"
 Write-Host `n"OU: "$OU
