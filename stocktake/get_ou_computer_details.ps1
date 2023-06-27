@@ -12,18 +12,18 @@ $password = $LoginCredentials['password']
 $creds = new-object -typename System.Management.Automation.PSCredential -argumentlist $Dom\$username, (ConvertTo-SecureString $password -AsPlainText -Force)
 
 # Choose OU
-$SiteCode = "5070"
-$Dom = "indigo"
 $LocalOU = "OU=School Managed,OU=Computers,OU=E"+$SiteCode+"S01,OU=Schools,DC="+$Dom+",DC=schools,DC=internal"
 $OU = $(Choose-ADOrganizationalUnit -HideNewOUFeature -Domain $FullDomNme -Credential $creds -RootOU $LocalOU).DistinguishedName
 Write-Host "OU: "$OU
 
-# Search the OU for computers and iterate through them
+# Find all computers in the OU
 $ouEntry = New-Object System.DirectoryServices.DirectoryEntry("LDAP://$OU", $username, $password)
 $searcher = New-Object System.DirectoryServices.DirectorySearcher($ouEntry)
 $searcher.Filter = "(objectClass=computer)"
-$searcher.PropertiesToLoad.Add("name")
 $results = $searcher.FindAll()
+
+# Write computer details to console
+Write-Host "Number of Computers: "$results.Count`n
 foreach ($result in $results) {
     $computerName = $result.Properties["name"][0]
     Write-Host "Computer Name: $computerName"
@@ -31,6 +31,7 @@ foreach ($result in $results) {
     $serial = (Get-WmiObject -ComputerName $computerName win32_bios).Serialnumber
     $model = (Get-WmiObject -ComputerName $computerName win32_computersystem).Model
 
+    # A switch to map computer model's to leases/owned etc
     switch ($model) {
         "20Q6S3N800" {
             Write-Host "Model: Lenovo Lease 15/16"
@@ -45,5 +46,3 @@ foreach ($result in $results) {
     
     Write-Host "Serial: "$serial`n
 }
-
-
