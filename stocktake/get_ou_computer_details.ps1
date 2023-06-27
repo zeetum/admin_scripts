@@ -23,9 +23,9 @@ $ouEntry = New-Object System.DirectoryServices.DirectoryEntry("LDAP://$OU", $use
 $searcher = New-Object System.DirectoryServices.DirectorySearcher($ouEntry)
 $searcher.Filter = "(objectClass=computer)"
 $results = $searcher.FindAll()
+Write-Host "Number of Computers: "$results.Count`n
 
 # Write computer details to console
-Write-Host "Number of Computers: "$results.Count`n
 Set-Content $FileName "Hostname, Model, Serial"
 foreach ($result in $results) {
     $computerName = $result.Properties["name"][0]
