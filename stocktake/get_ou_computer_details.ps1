@@ -1,7 +1,7 @@
 Import-Module .\Choose-ADOrganizationalUnit.psm1
 Import-Module .\GetLoginCredentials.psm1
 
-#Get Login Details
+# Get Login Details
 $LoginCredentials = GetCredentials
 $DCAddress = $LoginCredentials['DCAddress'].split(".")
 $SiteCode = $DCAddress[0].substring(1, 4)
