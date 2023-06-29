@@ -1,7 +1,5 @@
 Import-Module .\Choose-ADOrganizationalUnit.psm1
 
-https://devblogs.microsoft.com/powershell/powershell-foreach-object-parallel-feature/
-
 # Site Details
 $SiteCode = "5070"
 $Colour = "indigo"
