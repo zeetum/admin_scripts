@@ -14,3 +14,4 @@ switch ($model) {
 }
 
 Write-Host "Serial: "$serial
+Write-Host "Hostname: "$env:computername
