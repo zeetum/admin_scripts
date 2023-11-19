@@ -15,7 +15,7 @@ foreach ($regArch in @('Registry32', 'Registry64')) {
         $AppUninstall = $($AppDetails.GetValue("UninstallString"))
         
         # Find the NAP Browser to uninstall
-        if($AppDisplayName -like "Minecraft") { 
+        if($AppDisplayName -like "Minecraft Education") { 
             $start = $AppUninstall.IndexOf("{")
             $stop = $AppUninstall.IndexOf("}")
             $UninstallString = $AppUninstall.substring($start, $stop - $start + 1)
