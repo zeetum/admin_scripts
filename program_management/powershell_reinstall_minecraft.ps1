@@ -1,6 +1,3 @@
-# Update SCCM
-Invoke-WmiMethod -Namespace root\ccm -Class sms_client -Name TriggerSchedule "{00000000-0000-0000-0000-000000000021}"
-
 #### Remove old version from computer  ####
 $computer = $env:computername
 $UninstallRegKey="SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"
