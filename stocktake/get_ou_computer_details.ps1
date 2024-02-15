@@ -1,7 +1,7 @@
 Import-Module .\Choose-ADOrganizationalUnit.psm1
 
 # Site Details
-$SiteCode = "5070"
+$SiteCode = Read-Host "Site Code"
 $Colour = "indigo"
 $FullDomainName = $Colour + ".schools.internal"
 
@@ -25,10 +25,17 @@ foreach ($result in $results) {
     $computerName = $result.Properties["name"][0]
     $serial = (Get-WmiObject -ComputerName $computerName win32_bios).Serialnumber
     $model = (Get-WmiObject -ComputerName $computerName win32_computersystem).Model
+    $tpm = (Get-WmiObject -Namespace "Root\CIMv2\Security\MicrosoftTpm" -Class Win32_Tpm -ComputerName $hostname -ErrorAction Stop)
+
+    if ($tpm) {
+        $tpm_enablled = "true"
+    } else {
+        $tpm_enablled = "false"
+    }
 
     Write-Host `n"Computer Name: $computerName"
     Write-Host "Model: "$model
     Write-Host "Serial: "$serial
-
+    Write-Host "TPM Enabled: "$tpm_enablled
     Add-Content $FileName $computerName","$model","$serial
 }
