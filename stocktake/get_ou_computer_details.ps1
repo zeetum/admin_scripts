@@ -25,7 +25,7 @@ foreach ($result in $results) {
     $computerName = $result.Properties["name"][0]
     $serial = (Get-WmiObject -ComputerName $computerName win32_bios).Serialnumber
     $model = (Get-WmiObject -ComputerName $computerName win32_computersystem).Model
-    $tpm = (Get-WmiObject -Namespace "Root\CIMv2\Security\MicrosoftTpm" -Class Win32_Tpm -ComputerName $hostname -ErrorAction Stop)
+    $tpm = (Get-WmiObject -Namespace "Root\CIMv2\Security\MicrosoftTpm" -Class Win32_Tpm -ComputerName $computerName -ErrorAction Stop)
 
     if ($tpm) {
         $tpm_enablled = "true"
